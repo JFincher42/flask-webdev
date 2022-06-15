@@ -91,6 +91,7 @@ Flask = ">=0.8"
 visitor = "*"
 
 [[package]]
+<<<<<<< HEAD
 name = "flask-wtf"
 version = "1.0.1"
 description = "Form rendering, validation, and CSRF protection for Flask with WTForms."
@@ -107,6 +108,8 @@ WTForms = "*"
 email = ["email-validator"]
 
 [[package]]
+=======
+>>>>>>> e770a7e (Adding Bootstrap, some templates)
 name = "itsdangerous"
 version = "2.1.2"
 description = "Safely pass data to untrusted environments and back."
@@ -243,7 +246,11 @@ email = ["email-validator"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
+<<<<<<< HEAD
 content-hash = "a9aefeae187b187e1627e30c6bf47ef949c55a49e8a39442dc4ba359bbfbda4a"
+=======
+content-hash = "b42dd5c9d145f3da991940043193153c307e2405d0178eabee6cd4badb962109"
+>>>>>>> e770a7e (Adding Bootstrap, some templates)
 
 [metadata.files]
 black = [
@@ -294,10 +301,13 @@ flask = [
 flask-bootstrap = [
     {file = "Flask-Bootstrap-3.3.7.1.tar.gz", hash = "sha256:cb08ed940183f6343a64e465e83b3a3f13c53e1baabb8d72b5da4545ef123ac8"},
 ]
+<<<<<<< HEAD
 flask-wtf = [
     {file = "Flask-WTF-1.0.1.tar.gz", hash = "sha256:34fe5c6fee0f69b50e30f81a3b7ea16aa1492a771fe9ad0974d164610c09a6c9"},
     {file = "Flask_WTF-1.0.1-py3-none-any.whl", hash = "sha256:9d733658c80be551ce7d5bc13c7a7ac0d80df509be1e23827c847d9520f4359a"},
 ]
+=======
+>>>>>>> e770a7e (Adding Bootstrap, some templates)
 itsdangerous = [
     {file = "itsdangerous-2.1.2-py3-none-any.whl", hash = "sha256:2c2349112351b88699d8d4b6b075022c0808887cb7ad10069318a8b0bc88db44"},
     {file = "itsdangerous-2.1.2.tar.gz", hash = "sha256:5dbbc68b317e5e42f327f9021763545dc3fc3bfe22e6deb96aaf1fc38874156a"},
