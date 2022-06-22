@@ -8,10 +8,7 @@ authors = ["Jon Fincher <jfincher42@gmail.com>"]
 python = "^3.10"
 Flask = "^2.1.2"
 Flask-Bootstrap = "^3.3.7"
-<<<<<<< HEAD
 Flask-WTF = "^1.0.1"
-=======
->>>>>>> e770a7e (Adding Bootstrap, some templates)
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
