@@ -1,8 +1,0 @@
-{% import 'macros.html' as macros %}
-
-<p>My favorite songs:</p>
-<ul>
-{% for song in favorite_songs %}
-    {{ macros.render_song_title(song) }}
-{% endfor %}
-</ul>
