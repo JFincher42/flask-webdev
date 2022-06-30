@@ -30,7 +30,12 @@ class TestConfig(Config):
 
 # Production config
 class ProdConfig(Config):
-    pass
+    # Use the real DB
+    # Set the URI and other stuff here
+    dbuser = getenv("DBUSER")
+    dbpassword = getenv("DBPASSWORD")
+    dburi = getenv("DBURI")
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{dbuser}:{dbpassword}@{dburi}/music"
 
 
 config = {
