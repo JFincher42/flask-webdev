@@ -11,7 +11,7 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 
 
-## Application Factory 
+# Application Factory
 def create_app(config_name="default"):
     # Create the app instance
     app = Flask(__name__)
@@ -26,6 +26,7 @@ def create_app(config_name="default"):
 
     # Import and register the blueprint
     from .main import main as main_blueprint
+
     app.register_blueprint(main_blueprint)
 
     # App's done!
