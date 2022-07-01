@@ -12,6 +12,7 @@ Flask-WTF = "^1.0.1"
 Flask-SQLAlchemy = "^2.5.1"
 PyMySQL = "^1.0.2"
 Flask-Migrate = "^3.1.0"
+python-dotenv = "^0.20.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"

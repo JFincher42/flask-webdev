@@ -1,9 +1,13 @@
 # For environment variables
+from dotenv import load_dotenv
 from os import getenv
 
 
 class Config:
-    # Where can I put these secrets? dotenv seems a better place
+    # Load the dotenv file
+    load_dotenv()
+
+    # Get the Flask secret key
     SECRET_KEY = getenv("SECRETKEY")
 
     # Set the URI and other stuff here
@@ -31,6 +35,7 @@ class TestConfig(Config):
 # Production config
 class ProdConfig(Config):
     # Use the real DB
+
     # Set the URI and other stuff here
     dbuser = getenv("DBUSER")
     dbpassword = getenv("DBPASSWORD")
