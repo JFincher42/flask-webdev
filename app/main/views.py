@@ -7,7 +7,8 @@ from . import main
 # Get the stuff we need for our route
 from .forms import NameForm
 from .. import db
-from ..models import Role, User
+from ..models import User
+from flask_login import login_required
 
 
 # What should our main form look like?
@@ -32,3 +33,9 @@ def index():
     return render_template(
         "index.html", form=form, name=session.get("name"), known=session.get("known")
     )
+
+
+@main.route("/top-secret")
+@login_required
+def top_secret():
+    return "Welcome, VIP Member!"
