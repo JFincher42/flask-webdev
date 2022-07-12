@@ -5,5 +5,10 @@
 
 {% block page_content %}
 {{ super() }}
+<p>
+    New user?
+    <a href="{{ url_for('auth.register')}}">Click here to register</a>
+</p>
 {{ wtf.quick_form(form) }}
+
 {% endblock page_content %}

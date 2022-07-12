@@ -1,8 +1,9 @@
 # Get the stuff we need from flask
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import logout_user, login_user
-from .forms import LoginForm
+from .forms import LoginForm, RegistrationForm
 from ..models import User
+from .. import db
 
 # Get the blueprint
 from . import auth
@@ -33,9 +34,26 @@ def login():
 
 
 # Register a new user
-@auth.route("/register")
+@auth.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("auth/register.html")
+    registration_form = RegistrationForm()
+
+    if registration_form.validate_on_submit():
+        email_entered = registration_form.email.data
+        username_entered = registration_form.username.data
+        password_entered = registration_form.password.data
+
+        user = User()
+        user.email = email_entered
+        user.username = username_entered
+        user.password = password_entered
+        db.session.add(user)
+        db.session.commit()
+
+        flash(f"User {username_entered} registered, please login!")
+        return redirect(url_for(".login"))
+
+    return render_template("auth/register.html", form=registration_form)
 
 
 @auth.route("/logout")
