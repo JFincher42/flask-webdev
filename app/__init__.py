@@ -12,12 +12,16 @@ from config import config
 # Authentication
 from flask_login import LoginManager
 
+# Email
+from flask_mail import Mail
+
 # We need these in global scope
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 login_manager.login_view = "auth.login"
+mail = Mail()
 
 
 # Application Factory
@@ -36,6 +40,9 @@ def create_app(config_name="default"):
 
     # Login manager
     login_manager.init_app(app)
+
+    # Email
+    mail.init_app(app)
 
     # Import and register the blueprint
     from .main import main as main_blueprint

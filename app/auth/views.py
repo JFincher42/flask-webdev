@@ -1,9 +1,10 @@
 # Get the stuff we need from flask
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import logout_user, login_user
 from .forms import LoginForm, RegistrationForm
 from ..models import User
-from .. import db
+from .. import db, email
+from datetime import datetime
 
 # Get the blueprint
 from . import auth
@@ -49,6 +50,12 @@ def register():
         user.password = password_entered
         db.session.add(user)
         db.session.commit()
+
+        # Welcome the user
+        email.send_mail(email_entered, "Registered!", "mail/welcome", user=user)
+
+        # Notify the admin
+        email.send_mail(current_app.config["APP_ADMIN"], "New User", "mail/new_user", user=user, time=datetime.now())
 
         flash(f"User {username_entered} registered, please login!")
         return redirect(url_for(".login"))

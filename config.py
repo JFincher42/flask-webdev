@@ -17,6 +17,20 @@ class Config:
     SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{dbuser}:{dbpassword}@{dburi}/music-dev"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Email stuff
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+
+    MAIL_USERNAME = getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = getenv("MAIL_PASSWORD")
+
+    APP_ADMIN = getenv("APP_ADMIN")
+    APP_MAIL_SUBJECT_PREFIX = "Flask Webdev - "
+    APP_MAIL_SENDER = f"WebDev Admin <{APP_ADMIN}>"
+
+
+
     @staticmethod
     def init_app(app):
         pass
