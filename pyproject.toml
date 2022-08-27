@@ -16,6 +16,7 @@ python-dotenv = "^0.20.0"
 Flask-Login = "^0.6.1"
 email-validator = "^1.2.1"
 Flask-Mail = "^0.9.1"
+PyJWT = "^2.4.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
