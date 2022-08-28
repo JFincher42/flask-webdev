@@ -1,0 +1,5 @@
+Welcome to Flask-Webdev!
+
+Before you can continue, you need to confirm your email is valid. Please visit:
+    {{ url_for('auth.confirm', _external=True, token=token) }}
+to confirm your email.
