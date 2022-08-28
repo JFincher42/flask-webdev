@@ -1,6 +1,6 @@
 # Get the stuff we need from flask
 from flask import render_template, redirect, url_for, flash, request, current_app
-from flask_login import logout_user, login_user
+from flask_login import logout_user, login_user, login_required
 from .forms import LoginForm, RegistrationForm
 from ..models import User
 from .. import db, email
@@ -54,8 +54,19 @@ def register():
         # Welcome the user
         email.send_mail(email_entered, "Registered!", "mail/welcome", user=user)
 
+        # Send a confirmation email
+        email.send_mail(email_entered, "Please Confirm Email", "mail/confirm", \
+            url=url_for("confirm/<token>"), \
+            token=user.generate_confirmation_token())
+
         # Notify the admin
-        email.send_mail(current_app.config["APP_ADMIN"], "New User", "mail/new_user", user=user, time=datetime.now())
+        email.send_mail(
+            current_app.config["APP_ADMIN"],
+            "New User",
+            "mail/new_user",
+            user=user,
+            time=datetime.now(),
+        )
 
         flash(f"User {username_entered} registered, please login!")
         return redirect(url_for(".login"))
@@ -67,4 +78,23 @@ def register():
 def logout():
     logout_user()
     flash("You've been logged out successfully!")
+    return redirect(url_for("main.index"))
+
+
+@auth.route("/confirm/<token>")
+@login_required
+def confirm(token):
+    if current_user.confirmed:
+        # They're already confirmed
+        flash("You're already confirmed!")
+
+    elif current_user.confirm(token):
+        # They just confirmed, so commit the change
+        db.session.commit()
+        flash("Thank you for confirming!")
+
+    else:
+        # The token is invalid
+        flash("That confirmation code has expired, or is invalid.")
+
     return redirect(url_for("main.index"))
