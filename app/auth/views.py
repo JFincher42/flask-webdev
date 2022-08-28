@@ -51,8 +51,14 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        # Generate confirmation token and send link
+        token = user.generate_confirmation_token()
+        email.send_mail(
+            email_entered, "Confirm your email", "auth/email/confirm", token=token
+        )
+
         # Welcome the user
-        email.send_mail(email_entered, "Registered!", "mail/welcome", user=user)
+        # email.send_mail(email_entered, "Registered!", "mail/welcome", user=user)
 
         # Send a confirmation email
         email.send_mail(email_entered, "Please Confirm Email", "mail/confirm", \
@@ -84,17 +90,37 @@ def logout():
 @auth.route("/confirm/<token>")
 @login_required
 def confirm(token):
+
+    # If they're already confirmed, this is not needed
     if current_user.confirmed:
-        # They're already confirmed
-        flash("You're already confirmed!")
+        flash("You're already confirmed, silly!")
+        return redirect(url_for("main.index"))
 
-    elif current_user.confirm(token):
-        # They just confirmed, so commit the change
+    # Otherwise, we check the confirmation token, and confirm as necessary
+    if current_user.confirm(token):
         db.session.commit()
-        flash("Thank you for confirming!")
-
+        flash("You have confirmed your account! Thank you.")
     else:
-        # The token is invalid
-        flash("That confirmation code has expired, or is invalid.")
+        flash("Whoops! That confirmation link either expired, or it isn't valid.")
 
+    # In either case, head back to the main page
     return redirect(url_for("main.index"))
+
+
+@auth.before_app_request
+def before_request():
+    if (
+        current_user.is_authenticated
+        and not current_user.confirmed
+        and request != "static"
+        and request.blueprint != "auth"
+        and request.endpoint != "static"
+    ):
+        return redirect(url_for("auth.unconfirmed"))
+
+
+@auth.route("/unconfirmed")
+def unconfirmed():
+    if current_user.is_anonymous or current_user.confirmed:
+        return redirect(url_for("main.index"))
+    return render_template("auth/unconfirmed.html", user=current_user)

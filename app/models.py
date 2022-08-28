@@ -1,9 +1,10 @@
+import jwt
 from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask import current_app
-# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import jwt
+from datetime import datetime, timedelta
 
 
 # DB Models
@@ -40,48 +41,37 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
 
-    def generate_confirmation_token(self, expiration=3600):
-        # s = Serializer(current_app.secret_key, expires_in=expiration)
-        # return s.dumps({"confirm_id": self.id}).decode("utf-8")
-        confirm_token = jwt.encode(
-            {
-                "confirm_id": self.id,
-                "exp": datetime.datetime.now(tz=datetime.timezone.utc)
-                       + datetime.timedelta(seconds=expiration)
-            },
-            current_app.secret_key,
-            algorithm="HS256"
-        )
-        return confirm_token
+    # Generate a confirmation token with a default 1 hour expiration
+    def generate_confirmation_token(self, expiration_sec=3600):
+        expiration_time = datetime.utcnow() + timedelta(expiration_sec)
+        data = {"exp": expiration_time, "confirm_id": self.id}
+        return jwt.encode(data, current_app.secret_key, algorithm="HS512")
 
+    # Confirm a token returned to us
     def confirm(self, token):
-        # s = Serializer(current_app.secret_key)
-        # try:
-        #     data = s.loads(token.encode("utf-8"))
-        # except:
-        #     # loading the token threw an exception -- not confirmed
-        #     return False
-
-        # if data.get("confirm_id") != self.id:
-        #     return False
-
+        # Is the token valid?
         try:
-            data = jwt.decode(
-                token,
-                current_app.secret_key,
-                # leeway accounts for clock drift, differences
-                leeway=datetime.timedelta(seconds=10),
-                algorithms=["HS256"]
-            )
-        except:
+            data = jwt.decode(token, current_app.secret_key, algorithms=["HS512"])
+        except jwt.ExpiredSignatureError as e:
+            # Expired token
+            return False
+        except jwt.InvalidSignatureError as e:
+            # Invalid signature
             return False
 
+        # Valid token, but does it match?
         if data.get("confirm_id") != self.id:
+            # Wrong user
             return False
 
-        self.confirmed=True
+        # OK, all checks passed, we're good
+        self.confirmed = True
         db.session.add(self)
+
+        # Don't commit yet -- we need to make sure the user logs in correctly
+
         return True
+
 
 @login_manager.user_loader
 def load_user(user_id):
