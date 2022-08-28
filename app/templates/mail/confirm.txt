@@ -1,0 +1,8 @@
+Confirm email
+
+A request to access this site was sent to this email.
+You can confirm this by clicking on the link below.
+
+If this wasn't you, ignore this email and no account will be confirmed.
+
+Copy and paste this URL into your browser: {{confirm_url}}/{{token}}
