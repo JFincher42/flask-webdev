@@ -20,7 +20,6 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
-login_manager.login_view = "auth.login"
 mail = Mail()
 
 
@@ -39,6 +38,7 @@ def create_app(config_name="default"):
     migrate.init_app(app, db)
 
     # Login manager
+    login_manager.login_view = "auth.login"
     login_manager.init_app(app)
 
     # Email

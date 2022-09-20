@@ -1,0 +1,10 @@
+{% extends base.html %}
+
+{% block title %}Unconfirmed User{% endblock %}
+
+{% block body %}
+<h1>Welcome to the site, {{ current_user.username }}!</h1>
+<p>You have not yet confirmed your account. Please visit 
+    <a href="{{ url_for('auth.confirm', _external=True, token=token,) }}">this link</a> to confirm your email.
+</p>
+{% endblock %}

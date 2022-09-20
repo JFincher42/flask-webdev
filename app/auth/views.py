@@ -1,6 +1,6 @@
 # Get the stuff we need from flask
 from flask import render_template, redirect, url_for, flash, request, current_app
-from flask_login import logout_user, login_user, login_required
+from flask_login import logout_user, login_user, login_required, current_user
 from .forms import LoginForm, RegistrationForm
 from ..models import User
 from .. import db, email
@@ -8,6 +8,7 @@ from datetime import datetime
 
 # Get the blueprint
 from . import auth
+
 
 # Login in a known user
 @auth.route("/login", methods=["GET", "POST"])
@@ -61,9 +62,13 @@ def register():
         # email.send_mail(email_entered, "Registered!", "mail/welcome", user=user)
 
         # Send a confirmation email
-        email.send_mail(email_entered, "Please Confirm Email", "mail/confirm", \
-            url=url_for("confirm/<token>"), \
-            token=user.generate_confirmation_token())
+        email.send_mail(
+            email_entered,
+            "Please Confirm Email",
+            "mail/confirm",
+            url=url_for("confirm/<token>"),
+            token=user.generate_confirmation_token(),
+        )
 
         # Notify the admin
         email.send_mail(
